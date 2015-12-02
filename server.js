@@ -33,7 +33,18 @@ http.listen(3030, function(){
 
 //Web socket stuff-------------------------------------
 
-function addTail(filename, socket){
+var listeningSockets = [];
+
+function addTails(){
+    fs.readdir(logDir, function(err, files){
+        for (var i = 0; i < files.length; i++) {
+            var filename = files[i];
+            addTail(filename);
+        }
+    });
+}
+
+function addTail(filename){
     var fullpath = path.resolve(logDir, filename);
     t = new Tail(fullpath);
     t.on("line", function(line){
@@ -42,16 +53,29 @@ function addTail(filename, socket){
             line: line
         }
         console.log(message);
-        socket.emit("message", message);
+        listeningSockets.forEach(function(socket){
+            socket.emit("message", message);
+        });
     });
 }
 
+addTails();
+
 io.on('connection', function(socket){
-    fs.readdir(logDir, function(err, files){
-        for (var i = 0; i < files.length; i++) {
-            var filename = files[i];
-            addTail(filename, socket);
-        }
+    console.log('connected');
+    socket.on("listen", function(value){
+        console.log("Added listener");
+        listeningSockets.push(socket);
     });
+
+    // remove socket on disconnect
+    socket.on('disconnect', function () {
+        console.log("disconnected");
+    });
+
+  socket.on('message', function(message){
+      socket.broadcast.emit('message', message);
+      console.log(message);
+  });
 });
 
