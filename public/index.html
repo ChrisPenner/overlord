@@ -11,14 +11,18 @@
 
         <div class="categories">
             <div ng-repeat="(name, category) in categories" >
-                <div draggable="true" drag >
+                <div class="category" draggable="true" drag >
                     {{name}}
                 </div>
             </div>
         </div>
 
-            <pre view="view1" drop ondragover="allowDrop(event)">{{getContent('view1')}}</pre>
-            <pre view="view2" drop ondragover="allowDrop(event)">{{getContent('view2')}}</pre>
+        <div class="view" view="view1" drop ondragover="allowDrop(event)">
+            <span class="line" ng-repeat="line in view1" ng-class="line.type">{{line.text}}</span>
+        </div>
+        <div class="view" view="view2" drop ondragover="allowDrop(event)">
+            <span class="line" ng-repeat="line in view2" ng-class="line.type">{{line.text}}</span>
+        </div>
 
 
         <script type="text/javascript" charset="utf-8">
@@ -30,11 +34,6 @@
             function initSockets($scope){
                 var socket = io();
 
-                // Tell the server we're a consumer.
-                socket.on('connect', function(){
-                    socket.emit("listen");
-                });
-
                 function receiveMessage(message){
                     console.log(message);
                     var category = $scope.categories[message.category];
@@ -43,9 +42,7 @@
                         $scope.categories[message.category] = category;
                     }
 
-                    category.lines.push(message.line);
-                    console.log(category);
-
+                    category.lines.push(message);
                     $scope.$apply();
                 }
 
@@ -72,7 +69,8 @@
                     link: function($scope, elem, attr) {
                         elem.bind('drop', function(e) {
                             var category = e.dataTransfer.getData("text");
-                            $scope[attr.view] = category;
+                            a = $scope;
+                            $scope[attr.view] = $scope.categories[category].lines;
                             $scope.$apply();
                         });
                     }
@@ -82,14 +80,13 @@
                 $scope.logs = [];
                 $scope.categories = {};
                 initSockets($scope);
-
-                $scope.getContent = function(view) {
-                    var category = $scope[view];
-                    if(!$scope.categories[category]){
-                        return "Drag a server here to start tracking it.";
-                    }
-                    return $scope.categories[category].lines.join('\n');
-                }
+//                $scope.getContent = function(view) {
+//                    var category = $scope[view];
+//                    if(!$scope.categories[category]){
+//                        return "Drag a server here to start tracking it.";
+//                    }
+//                    return $scope.categories[category].lines.join('\n');
+//                }
             });
         </script>
 

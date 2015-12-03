@@ -33,8 +33,19 @@ http.listen(3030, function(){
 
 //Web socket stuff-------------------------------------
 
-var listeningSockets = [];
 var followingFiles = [];
+
+function typeOf(line){
+    var good = /good/;
+    var bad = /bad/;
+    if(good.test(line)){
+        return 'good';
+    } else if (bad.test(line)) {
+        return 'bad';
+    } 
+
+    return 'info';
+}
 
 function addTails(){
     fs.readdir(logDir, function(err, files){
@@ -52,12 +63,11 @@ function addTail(filename){
     t.on("line", function(line){
         var message = {
             category: filename,
-            line: line
+            text: line,
+            type: typeOf(line)
         }
         console.log(message);
-        listeningSockets.forEach(function(socket){
-            socket.emit("message", message);
-        });
+        io.emit("message", message)
     });
 }
 
@@ -65,14 +75,6 @@ addTails();
 
 io.on('connection', function(socket){
     console.log('connected');
-    socket.on("listen", function(value){
-        console.log("Added listener");
-        listeningSockets.push(socket);
-        // Always show all servers we're tracking.
-        followingFiles.forEach(function(filename){
-            socket.emit("message", {category: filename, line:''});
-        })
-    });
 
     // remove socket on disconnect
     socket.on('disconnect', function () {
