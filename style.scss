@@ -2,3 +2,18 @@ textarea {
   width: 100%;
   height: 100%;
 }
+
+pre {
+  flex: 1 0 50%;
+  outline: red;
+}
+
+body {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.categories {
+  display: flex;
+  flex-flow: column nowrap;
+}
