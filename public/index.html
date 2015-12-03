@@ -8,51 +8,57 @@
     </head>
     <body ng-controller="LogsCtrl">
 
-        <div ng-repeat="(server, logs) in messages">
-            <div>
-                <h3>{{server}}</h3>
-                <ul>
-                    <li ng-repeat="line in logs track by $index">{{line}}</li>
-                </ul>
+        <div ng-repeat="(name, category) in categories">
+            <label>{{name}}<input type="checkbox" ng-model="category.show" name="{{name}}"></label>
+        </div>
+
+        <div ng-repeat="(name, category) in categories">
+            <div ng-show="category.show">
+                <h3>{{name}}</h3>
+                <pre>
+                    <div ng-repeat="line in category.lines track by $index">{{line}}</div>
+</pre>
             </div>
         </div>
 
-        <script type="text/javascript" charset="utf-8">
-        </script>
+    <script type="text/javascript" charset="utf-8">
+    </script>
 
-        <script type="text/javascript" charset="utf-8">
+    <script type="text/javascript" charset="utf-8">
 
 
-            function initSockets($scope){
-                var socket = io();
+        function initSockets($scope){
+            var socket = io();
 
-                // Tell the server we're a consumer.
-                socket.on('connect', function(){
-                    socket.emit("listen");
-                });
+            // Tell the server we're a consumer.
+            socket.on('connect', function(){
+                socket.emit("listen");
+            });
 
-                function receiveMessage(message){
-                    console.log(message);
-                    list = $scope.messages[message.server];
-                    if (list === undefined){
-                        list = [];
-                        $scope.messages[message.server] = list;
-                    }
-                    list.push(message.line);
-
-                    $scope.$apply();
+            function receiveMessage(message){
+                console.log(message);
+                var category = $scope.categories[message.category];
+                if (category === undefined){
+                    category = {lines: []};
+                    $scope.categories[message.category] = category;
                 }
 
-                socket.on('message', receiveMessage);
+                category.lines.push(message.line);
+                console.log(category);
+
+                $scope.$apply();
             }
 
+            socket.on('message', receiveMessage);
+        }
 
-            var app = angular.module("overlord", []);
-            app.controller("LogsCtrl", function($scope) {
-                $scope.logs = [];
-                $scope.messages = {};
-                initSockets($scope)
-            });
-        </script>
-    </body>
+
+        var app = angular.module("overlord", []);
+        app.controller("LogsCtrl", function($scope) {
+            $scope.logs = [];
+            $scope.categories = {};
+            initSockets($scope)
+        });
+    </script>
+</body>
 </html>

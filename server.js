@@ -34,6 +34,7 @@ http.listen(3030, function(){
 //Web socket stuff-------------------------------------
 
 var listeningSockets = [];
+var followingFiles = [];
 
 function addTails(){
     fs.readdir(logDir, function(err, files){
@@ -46,10 +47,11 @@ function addTails(){
 
 function addTail(filename){
     var fullpath = path.resolve(logDir, filename);
+    followingFiles.push(filename);
     t = new Tail(fullpath);
     t.on("line", function(line){
         var message = {
-            server: filename,
+            category: filename,
             line: line
         }
         console.log(message);
@@ -66,6 +68,10 @@ io.on('connection', function(socket){
     socket.on("listen", function(value){
         console.log("Added listener");
         listeningSockets.push(socket);
+        // Always show all servers we're tracking.
+        followingFiles.forEach(function(filename){
+            socket.emit("message", {category: filename, line:''});
+        })
     });
 
     // remove socket on disconnect
