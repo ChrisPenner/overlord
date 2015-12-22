@@ -17,29 +17,34 @@ body {
 .categories {
   display: flex;
   flex-flow: row nowrap;
-  padding: 1em;
-  height: 10%;
+  // padding: 1em;
+  min-height: 10%;
 }
 
-.category {
-  padding: 0.5em;
+category {
+  padding: 1em;
   border: 1px solid black;
   margin: 10px;
   cursor: grab;
 }
 
 .line {
+  cursor: pointer;
   display: block;
   width: 100%;
   padding: 3px;
+  border-bottom: 1px solid #EEE;
+  font-family: monospace;
 }
 
 .good {
-  background: green;
+  background: #35BCAF;
+  color: white;
 }
 
 .bad {
-  background: red;
+  background: #FF6C6A;
+  color: white;
 }
 
 pre {
@@ -52,10 +57,10 @@ pre {
   height: 90%;
 }
 
-.view {
+view {
   height: 100%;
   position: relative;
-  flex: 1 0;
+  flex: 1 1 50%;
   border: 1px solid black;
   overflow-y: scroll;
   padding-top: 1.5em;

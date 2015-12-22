@@ -8,36 +8,26 @@
     </head>
     <body ng-controller="LogsCtrl">
         <div class="categories">
-            <div ng-repeat="(name, category) in categories" >
-                <div class="category" draggable="true" drag >
-                    {{name}}
-                </div>
-            </div>
+            <category ng-repeat="(name, category) in categories" name="{{name}}"> </category>
         </div>
 
         <div class="views">
-            <div class="view" view="view1" drop ondragover="allowDrop(event)">
-                <h2 class="title">{{view1.name}}</h2>
-                <div class="lines">
-                    <span class="line" ng-repeat="line in view1.lines" ng-class="line.type">{{line.text}}</span>
-                </div>
-            </div>
-            <div class="view" view="view2" drop ondragover="allowDrop(event)">
-                <h2 class="title">{{view2.name}}</h2>
-                <div class="lines">
-                    <span class="line" ng-repeat="line in view2.lines" ng-class="line.type">{{line.text}}</span>
-                </div>
-            </div>
+            <view></view>
+            <view></view>
         </div>
 
         <script type="text/javascript" charset="utf-8">
-
-
             function initSockets($scope){
                 var socket = io();
 
+                function autoScroll(){
+                    var views = document.getElementsByClassName('lines');
+                    for(var i=0; i<views.length; i++){
+                        views[i].scrollTop = views[i].scrollHeight;
+                    }
+                };
+
                 function receiveMessage(message){
-                    console.log(message);
                     var category = $scope.categories[message.category];
                     if (category === undefined){
                         category = {name: message.category, lines: []};
@@ -46,57 +36,66 @@
 
                     category.lines.push(message);
                     $scope.$apply();
-                }
+                    autoScroll();
+                };
 
                 socket.on('message', receiveMessage);
-            }
-
+            };
 
             var app = angular.module("overlord", []);
 
-            app.directive('drag', function() {
+            app.directive('category', function() {
                 return {
-                    restrict: 'A',
+                    restrict: 'E',
                     link: function($scope, elem, attr) {
+                        attr.$set('draggable', true);
                         elem.bind('dragstart', function(e) {
                             e.dataTransfer.setData("text", $scope.name);
                         });
-                    }
+                    },
+                    template: "{{name}}",
                 };
             });
 
-            app.directive('drop', function() {
+            app.directive('view', function() {
                 return {
-                    restrict: 'A',
+                    restrict: 'E',
                     link: function($scope, elem, attr) {
-                        elem.bind('drop', function(e) {
+                        elem.bind('dragover', function(e){e.preventDefault()});
+                        elem.bind('drop', function(e){
                             var category = e.dataTransfer.getData("text");
-                            a = $scope;
-                            $scope[attr.view] = $scope.categories[category];
+                            $scope.category = $scope.$parent.categories[category]
                             $scope.$apply();
                         });
-                    }
+                    },
+                    scope: true,
+                    template: '<h2 class="title">{{category.name}}</h2>' +
+                        '<div class="lines">' +
+                        '<span class="line" ng-click="select($event)" ng-repeat="line in category.lines" ng-class="line.type">{{line.text}}</span>' +
+                        '</div>',
+
                 };
             });
+
             app.controller("LogsCtrl", function($scope) {
                 $scope.logs = [];
                 $scope.categories = {};
+                $scope.select = function($event) {
+                    var elem = $event.target;
+                    if (document.selection) {
+                        var range = document.body.createTextRange();
+                        range.moveToElementText(document.getElementById(containerid));
+                        range.select();
+                    } else if (window.getSelection) {
+                        var selection = window.getSelection();
+                        selection.empty();
+                        var range = document.createRange();
+                        range.selectNode(elem);
+                        selection.addRange(range);
+                    }
+                }
                 initSockets($scope);
-//                $scope.getContent = function(view) {
-//                    var category = $scope[view];
-//                    if(!$scope.categories[category]){
-//                        return "Drag a server here to start tracking it.";
-//                    }
-//                    return $scope.categories[category].lines.join('\n');
-//                }
             });
-        </script>
-
-        <script>
-            function allowDrop(e) {
-                // Allow dropping.
-                e.preventDefault();
-            }
         </script>
     </body>
 </html>
