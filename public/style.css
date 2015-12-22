@@ -5,26 +5,7 @@ textarea {
   width: 100%;
   height: 100%; }
 
-.view {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 0;
-      -ms-flex: 1 0;
-          flex: 1 0;
-  border: 1px solid black;
-  height: 500px;
-  padding: 1em;
-  overflow: scroll; }
-
 body {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-flow: row nowrap;
-      -ms-flex-flow: row nowrap;
-          flex-flow: row nowrap; }
-
-.categories {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -32,12 +13,24 @@ body {
   -webkit-flex-flow: column nowrap;
       -ms-flex-flow: column nowrap;
           flex-flow: column nowrap;
-  padding: 1em; }
+  height: 100vh;
+  margin: 0; }
+
+.categories {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  padding: 1em;
+  height: 10%; }
 
 .category {
   padding: 0.5em;
   border: 1px solid black;
-  margin: 10px 0;
+  margin: 10px;
   cursor: -webkit-grab;
   cursor: grab; }
 
@@ -51,5 +44,45 @@ body {
 
 .bad {
   background: red; }
+
+pre {
+  font-size: 0.8em; }
+
+.views {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  height: 90%; }
+
+.view {
+  height: 100%;
+  position: relative;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0;
+      -ms-flex: 1 0;
+          flex: 1 0;
+  border: 1px solid black;
+  overflow-y: scroll;
+  padding-top: 1.5em; }
+
+.title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: black;
+  color: white;
+  font-size: 1rem;
+  padding: 5px;
+  margin: 0;
+  height: 1.5rem; }
+
+.lines {
+  overflow-y: scroll;
+  height: 100%; }
 
 /*# sourceMappingURL=style.css.map */

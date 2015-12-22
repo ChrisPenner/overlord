@@ -7,8 +7,6 @@
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <body ng-controller="LogsCtrl">
-
-
         <div class="categories">
             <div ng-repeat="(name, category) in categories" >
                 <div class="category" draggable="true" drag >
@@ -17,16 +15,20 @@
             </div>
         </div>
 
-        <div class="view" view="view1" drop ondragover="allowDrop(event)">
-            <span class="line" ng-repeat="line in view1" ng-class="line.type">{{line.text}}</span>
+        <div class="views">
+            <div class="view" view="view1" drop ondragover="allowDrop(event)">
+                <h2 class="title">{{view1.name}}</h2>
+                <div class="lines">
+                    <span class="line" ng-repeat="line in view1.lines" ng-class="line.type">{{line.text}}</span>
+                </div>
+            </div>
+            <div class="view" view="view2" drop ondragover="allowDrop(event)">
+                <h2 class="title">{{view2.name}}</h2>
+                <div class="lines">
+                    <span class="line" ng-repeat="line in view2.lines" ng-class="line.type">{{line.text}}</span>
+                </div>
+            </div>
         </div>
-        <div class="view" view="view2" drop ondragover="allowDrop(event)">
-            <span class="line" ng-repeat="line in view2" ng-class="line.type">{{line.text}}</span>
-        </div>
-
-
-        <script type="text/javascript" charset="utf-8">
-        </script>
 
         <script type="text/javascript" charset="utf-8">
 
@@ -38,7 +40,7 @@
                     console.log(message);
                     var category = $scope.categories[message.category];
                     if (category === undefined){
-                        category = {lines: []};
+                        category = {name: message.category, lines: []};
                         $scope.categories[message.category] = category;
                     }
 
@@ -70,7 +72,7 @@
                         elem.bind('drop', function(e) {
                             var category = e.dataTransfer.getData("text");
                             a = $scope;
-                            $scope[attr.view] = $scope.categories[category].lines;
+                            $scope[attr.view] = $scope.categories[category];
                             $scope.$apply();
                         });
                     }

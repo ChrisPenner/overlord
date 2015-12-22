@@ -42,8 +42,7 @@ function typeOf(line){
         return 'good';
     } else if (bad.test(line)) {
         return 'bad';
-    } 
-
+    }
     return 'info';
 }
 

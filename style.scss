@@ -7,30 +7,24 @@ textarea {
   height: 100%;
 }
 
-.view {
-  flex: 1 0;
-  border: 1px solid black;
-  height: 500px;
-  padding: 1em;
-  overflow: scroll;
-
-}
-
 body {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
+  height: 100vh;
+  margin: 0;
 }
 
 .categories {
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
   padding: 1em;
+  height: 10%;
 }
 
 .category {
   padding: 0.5em;
   border: 1px solid black;
-  margin: 10px 0;
+  margin: 10px;
   cursor: grab;
 }
 
@@ -46,4 +40,42 @@ body {
 
 .bad {
   background: red;
+}
+
+pre {
+  font-size: 0.8em;
+}
+
+.views {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 90%;
+}
+
+.view {
+  height: 100%;
+  position: relative;
+  flex: 1 0;
+  border: 1px solid black;
+  overflow-y: scroll;
+  padding-top: 1.5em;
+}
+
+.title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: black;
+  color: white;
+  font-size: 1rem;
+  padding: 5px;
+  margin: 0;
+  height: 1.5rem;
+}
+
+
+.lines {
+  overflow-y: scroll;
+  height: 100%;
 }
