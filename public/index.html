@@ -3,17 +3,20 @@
     <head>
         <title>Overlord</title>
         <link rel="stylesheet" href="style.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
     </head>
-    <body ng-controller="OverlordCtrl">
-        <div class="categories">
-            <category ng-repeat="(name, category) in categories" name="{{name}}"> </category>
-        </div>
-        <div class="views">
-            <view></view>
-            <view></view>
-        </div>
+    <body>
+        <div id="mount"></div>
+        <!-- <div class="categories"> -->
+        <!--     <category ng-repeat="(name, category) in categories" name="{{name}}"> </category> -->
+        <!-- </div> -->
+        <!-- <div class="views"> -->
+        <!--     <view></view> -->
+        <!--     <view></view> -->
+        <!-- </div> -->
 
         <script type="text/javascript" charset="utf-8">
             function autoScroll(){
@@ -39,7 +42,7 @@
                 socket.on('message', receiveMessage);
             };
 
-            var app = angular.module("overlord", []);
+            /*var app = angular.module("overlord", []);
 
             app.directive('category', function() {
                 return {
@@ -94,6 +97,107 @@
                 $scope.select = select;
                 initSockets($scope);
             });
+            */
+        </script>
+
+        <script type="text/babel">
+
+            var App = React.createClass({
+                getInitialState: function(){
+                    return {
+                        categories: [{name: "one"}, {name: "Two"}]
+                    }
+                },
+                render: function(){
+                    return (
+                        <div className="app">
+                        App
+                        <Categories data={this.state.categories}/>
+                        <Views/>
+                        </div>
+                    );
+                }
+            });
+
+            var Views = React.createClass({
+                getInitialState: function(){
+                    return {
+                        data: [
+                            {name: "view1", lines: ['test', 'this', 'out']},
+                            {name: "view2", lines: ['Stuff', 'this', 'out']}
+                        ]
+                    }
+                },
+                render: function(){
+                    var views = this.state.data.map(function(view){
+                        return (
+                            <View key={view.name} data={view}/>
+                        );
+                    });
+                    return (
+                        <div className="views">{views}</div>
+                    );
+                }
+            });
+
+            var View = React.createClass({
+                getInitialState: function(){
+                    return {
+                        categoryName: ''
+                    }
+                },
+                preventDefault: function(e){
+                    e.preventDefault();
+                },
+                dataDrop: function(e){
+                    var category = e.dataTransfer.getData("text");
+                    this.setState({categoryName: category});
+                },
+                render: function(){
+                    var lines = this.props.data.lines.map(function(line, i){
+                        return (
+                            <span className="line" key={i}>{line}</span>
+                        );
+                    })
+                    return (
+                        <div className="view" onDragOver={this.preventDefault} >
+                        <h2 className="title">{this.state.categoryName}{this.props.data.name}</h2>
+                        <div className="lines"> 
+                        {lines}
+                        </div>
+                        </div>
+                    );
+                }
+            });
+
+            var Categories = React.createClass({
+                getInitialState: function() {
+                    return {data: []};
+                },
+                render: function(){
+                    var categories = this.props.data.map(function(category){
+                        return (
+                            <Category key={category.name} data={category}/>
+                        );
+                    });
+                    return (
+                        <div  className="categories" >
+                            {categories}
+                        </div>
+                    )
+                }
+            });
+
+            var Category = React.createClass({
+                render: function(){
+                    return (
+                        <div draggable className="category">{this.props.data.name}</div>
+                    );
+                }
+            });
+
+
+            ReactDOM.render(<App/>, document.getElementById('mount'));
         </script>
     </body>
 </html>

@@ -22,7 +22,7 @@ body {
           flex-flow: row nowrap;
   min-height: 10%; }
 
-category {
+.category {
   padding: 1em;
   border: 1px solid black;
   margin: 10px;
@@ -55,7 +55,7 @@ category {
           flex-flow: row nowrap;
   height: 90%; }
 
-view {
+.view {
   height: 100%;
   position: relative;
   -webkit-box-flex: 1;

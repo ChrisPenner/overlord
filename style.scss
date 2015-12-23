@@ -15,7 +15,7 @@ body {
   min-height: 10%;
 }
 
-category {
+.category {
   padding: 1em;
   border: 1px solid black;
   margin: 10px;
@@ -47,7 +47,7 @@ category {
   height: 90%;
 }
 
-view {
+.view {
   height: 100%;
   position: relative;
   flex: 1 1 50%;
