@@ -37,40 +37,32 @@
         </script>
 
         <script type="text/babel">
-
             var App = React.createClass({
                 getInitialState: function(){
                     return {
                         categories: {
                             "None": {name:"None", lines: [{type: "info", text:"Text!"}, {type: "info", text:"Next!!"}]}
-                        }
-                    }
-                },
-                render: function(){
-                    return (
-                        <div className="app">
-                        <Categories categories={this.state.categories}/>
-                        <Views categories={this.state.categories}/>
-                        </div>
-                    );
-                }
-            });
-
-            var Views = React.createClass({
-                getInitialState: function(){
-                    return {
-                        data: [ "view1", "view2" ],
+                        },
+                        views: ["view1", "view2"]
                     }
                 },
                 render: function(){
                     var self = this;
-                    var views = this.state.data.map(function(view){
+                    var views = this.state.views.map(function(view){
                         return (
-                            <View key={view} categories={self.props.categories}/>
+                            <View key={view} categories={self.state.categories}/>
+                        );
+                    });
+                    var categories = Object.keys(this.state.categories).map(function (key) {
+                        return (
+                            <Category key={key} category={self.state.categories[key]}/>
                         );
                     });
                     return (
-                        <div className="views">{views}</div>
+                        <div className="app">
+                        <div  className="categories" > {categories} </div>
+                        <div className="views" categories={this.state.categories}>{views}</div>
+                        </div>
                     );
                 }
             });
@@ -115,22 +107,6 @@
                         <div className="lines"> 
                         {lines}
                         </div>
-                        </div>
-                    );
-                }
-            });
-
-            var Categories = React.createClass({
-                render: function(){
-                    var self = this;
-                    var categories = Object.keys(this.props.categories).map(function (key) {
-                        return (
-                            <Category key={key} category={self.props.categories[key]}/>
-                        );
-                    });
-                    return (
-                        <div  className="categories" >
-                        {categories}
                         </div>
                     );
                 }
