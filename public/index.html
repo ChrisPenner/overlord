@@ -118,7 +118,9 @@
                 },
                 render: function(){
                     return (
-                        <div draggable onDragStart={this.dragStart} className="category">{this.props.category.name}</div>
+                        <div draggable onDragStart={this.dragStart} className="category">
+                            {this.props.category.name}
+                        </div>
                     );
                 }
             });
