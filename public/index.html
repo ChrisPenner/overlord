@@ -12,13 +12,6 @@
         <div id="app"></div>
 
         <script type="text/javascript" charset="utf-8">
-            function autoScroll(){
-                var views = document.getElementsByClassName('lines');
-                for(var i=0; i<views.length; i++){
-                    views[i].scrollTop = views[i].scrollHeight;
-                }
-            };
-
             function initSockets(app){
                 var socket = io();
                 function receiveMessage(message){
@@ -30,7 +23,6 @@
                     }
                     category.lines.push(message);
                     app.setState({categories: categories});
-                    autoScroll();
                 };
                 socket.on('message', receiveMessage);
             };
@@ -38,72 +30,59 @@
 
         <script type="text/babel">
             var App = React.createClass({
+                alterView: function(index, newCategory) {
+                    let views = this.state.views.slice();
+                    views.splice(index, 1, newCategory);
+                    this.setState({views: views});
+                },
                 getInitialState: function(){
                     return {
-                        categories: {
-                            "None": {name:"None", lines: [{type: "info", text:"Text!"}, {type: "info", text:"Next!!"}]}
-                        },
-                        views: ["view1", "view2"]
+                        views: [undefined],
+                        categories: {},
                     }
                 },
                 render: function(){
-                    var self = this;
-                    var views = this.state.views.map(function(view){
+                    var views = this.state.views.map((category, index) => {
                         return (
-                            <View key={view} categories={self.state.categories}/>
+                            <View category={category} key={index} categories={this.state.categories} alterView={this.alterView}/>
                         );
                     });
-                    var categories = Object.keys(this.state.categories).map(function (key) {
+                    var categories = Object.keys(this.state.categories).map((key) => {
                         return (
-                            <Category key={key} category={self.state.categories[key]}/>
+                            <Category key={key} category={this.state.categories[key]}/>
                         );
                     });
                     return (
                         <div className="app">
-                        <div  className="categories" > {categories} </div>
-                        <div className="views" categories={this.state.categories}>{views}</div>
+                            <div  className="categories"> {categories} </div>
+                            <div className="views" categories={this.state.categories}>{views}</div>
                         </div>
                     );
                 }
             });
 
             var View = React.createClass({
-                getInitialState: function(){
-                    return {
-                        categoryName: 'None'
-                    }
-                },
                 preventDefault: function(e){
                     e.preventDefault();
                 },
                 dataDrop: function(e){
                     var category = e.dataTransfer.getData("text");
-                    this.setState({categoryName: category});
-                },
-                select: function(e){
-                    var elem = e.target;
-                    if (document.selection) {
-                        var range = document.body.createTextRange();
-                        range.moveToElementText(document.getElementById(containerid));
-                        range.select();
-                    } else if (window.getSelection) {
-                        var selection = window.getSelection();
-                        selection.empty();
-                        var range = document.createRange();
-                        range.selectNode(elem);
-                        selection.addRange(range);
-                    }
+                    this.props.alterView(this.props.key, category);
                 },
                 render: function(){
-                    var self = this;
-                    var lines = this.props.categories[this.state.categoryName].lines.map(function(line, i){
-                        return (
-                            <div onClick={self.select} className={"line " + line.type} key={i}>{line.text}</div>
-                        );
-                    })
+                    var category = this.props.categories[this.props.category];
+                    let lines = []
+                    if (category){
+                        lines = category.lines.map((line, index) => {
+                            return (
+                                <div className={"line " + line.type} key={index}>{line.text}</div>
+                            );
+                        });
+                    }
+
                     return (
                         <div className="view" onDrop={this.dataDrop} onDragOver={this.preventDefault} >
-                        <h2 className="title">{this.state.categoryName}</h2>
+                        <h2 className="title">{this.props.category}</h2>
                         <div className="lines"> 
                         {lines}
                         </div>
