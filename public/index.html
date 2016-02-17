@@ -17,16 +17,15 @@
                 var socket = io();
                 function initialize(categories){
                     app.setState({categories: categories});
-                    console.log('asdf')
                 };
                 function receiveMessage(message){
                     var categories = app.state.categories;
                     var category = categories[message.category];
                     if (category === undefined){
-                        category = {name: message.category, lines: []};
+                        category = [];
                         categories[message.category] = category;
                     }
-                    category.lines.push(message);
+                    category.push(message);
                     app.setState({categories: categories});
                 };
                 socket.on('message', receiveMessage);
@@ -43,24 +42,24 @@
                 },
                 getInitialState: function(){
                     return {
-                        views: [undefined],
+                        views: [undefined, undefined],
                         categories: {},
                     }
                 },
                 render: function(){
                     var views = this.state.views.map((category, index) => {
                         return (
-                            <View category={category} key={index} categories={this.state.categories} alterView={this.alterView}/>
+                            <View category={category} key={index} index={index} categories={this.state.categories} alterView={this.alterView}/>
                         );
                     });
                     var categories = Object.keys(this.state.categories).map((key) => {
                         return (
-                            <Category key={key} category={this.state.categories[key]}/>
+                            <Category key={key} name={key} category={this.state.categories[key]}/>
                         );
                     });
                     return (
                         <div className="app">
-                            <div  className="categories"> {categories} </div>
+                            <div className="categories"> {categories} </div>
                             <div className="views" categories={this.state.categories}>{views}</div>
                         </div>
                     );
@@ -73,13 +72,13 @@
                 },
                 dataDrop: function(e){
                     var category = e.dataTransfer.getData("text");
-                    this.props.alterView(this.props.key, category);
+                    this.props.alterView(this.props.index, category);
                 },
                 render: function(){
                     var category = this.props.categories[this.props.category];
                     let lines = []
                     if (category){
-                        lines = category.lines.map((line, index) => {
+                        lines = category.map((line, index) => {
                             return (
                                 <div className={"line " + line.type} key={index}>{line.text}</div>
                             );
@@ -99,12 +98,12 @@
 
             var Category = React.createClass({
                 dragStart: function(e){
-                    e.dataTransfer.setData("text", this.props.category.name);
+                    e.dataTransfer.setData("text", this.props.name);
                 },
                 render: function(){
                     return (
                         <div className="btn btn-default" draggable onDragStart={this.dragStart}>
-                            {this.props.category.name}
+                            {this.props.name}
                         </div>
                     );
                 }

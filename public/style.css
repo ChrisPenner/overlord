@@ -54,12 +54,10 @@ Category {
   display: flex;
   -webkit-flex-flow: row nowrap;
       -ms-flex-flow: row nowrap;
-          flex-flow: row nowrap;
-  height: 90%; }
+          flex-flow: row nowrap; }
 
 .view {
-  height: 100%;
-  min-height: 100px;
+  height: 90vh;
   -webkit-box-flex: 1;
   -webkit-flex: 1 1 50%;
       -ms-flex: 1 1 50%;
