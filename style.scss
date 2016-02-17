@@ -18,6 +18,7 @@ body {
 .categories {
   display: flex;
   flex-flow: row nowrap;
+  width: 100%;
 }
 
 Category{
@@ -28,7 +29,6 @@ Category{
 }
 
 .line {
-  cursor: pointer;
   display: block;
   width: 100%;
   padding: 3px;

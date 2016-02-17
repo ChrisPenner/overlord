@@ -23,7 +23,8 @@ body {
   display: flex;
   -webkit-flex-flow: row nowrap;
       -ms-flex-flow: row nowrap;
-          flex-flow: row nowrap; }
+          flex-flow: row nowrap;
+  width: 100%; }
 
 Category {
   margin: 0.1em; }
@@ -32,7 +33,6 @@ Category {
     cursor: grab !important; }
 
 .line {
-  cursor: pointer;
   display: block;
   width: 100%;
   padding: 3px;
