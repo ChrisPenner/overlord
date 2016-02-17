@@ -2,6 +2,7 @@
 <html ng-app="overlord">
     <head>
         <title>Overlord</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link rel="stylesheet" href="style.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
@@ -14,6 +15,10 @@
         <script type="text/javascript" charset="utf-8">
             function initSockets(app){
                 var socket = io();
+                function initialize(categories){
+                    app.setState({categories: categories});
+                    console.log('asdf')
+                };
                 function receiveMessage(message){
                     var categories = app.state.categories;
                     var category = categories[message.category];
@@ -25,6 +30,7 @@
                     app.setState({categories: categories});
                 };
                 socket.on('message', receiveMessage);
+                socket.on('init', initialize);
             };
         </script>
 
@@ -81,11 +87,11 @@
                     }
 
                     return (
-                        <div className="view" onDrop={this.dataDrop} onDragOver={this.preventDefault} >
-                        <h2 className="title">{this.props.category}</h2>
-                        <div className="lines"> 
-                        {lines}
-                        </div>
+                        <div className="view panel panel-info" onDrop={this.dataDrop} onDragOver={this.preventDefault} >
+                            <div className="panel-heading">{this.props.category || "Drag a category here!"}</div>
+                            <div className="panel-body lines"> 
+                            {lines}
+                            </div>
                         </div>
                     );
                 }
@@ -97,7 +103,7 @@
                 },
                 render: function(){
                     return (
-                        <div draggable onDragStart={this.dragStart} className="category">
+                        <div className="btn btn-default" draggable onDragStart={this.dragStart}>
                             {this.props.category.name}
                         </div>
                     );

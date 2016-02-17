@@ -34,6 +34,7 @@ http.listen(3030, function(){
 //Web socket stuff-------------------------------------
 
 var followingFiles = [];
+var messages = {};
 
 function typeOf(line){
     var good = /good/;
@@ -46,6 +47,7 @@ function typeOf(line){
     return 'info';
 }
 
+// Add a listener to each log-file
 function addTails(){
     fs.readdir(logDir, function(err, files){
         for (var i = 0; i < files.length; i++) {
@@ -55,10 +57,12 @@ function addTails(){
     });
 }
 
+// Add a listener
 function addTail(filename){
     var fullpath = path.resolve(logDir, filename);
     followingFiles.push(filename);
     t = new Tail(fullpath);
+    // Each time a new line comes in, send it along
     t.on("line", function(line){
         var message = {
             category: filename,
@@ -66,15 +70,23 @@ function addTail(filename){
             type: typeOf(line)
         }
         console.log(message);
+        storeMessage(message);
         io.emit("message", message)
     });
 }
 
-addTails();
+function storeMessage(message){
+    if (messages[message.category] === undefined){
+        messages[message.category] = [];
+    }
+    messageList = messages[message.category];
+    messageList.push(message);
+}
+
 
 io.on('connection', function(socket){
     console.log('connected');
-
+    socket.emit('init', messages);
     // remove socket on disconnect
     socket.on('disconnect', function () {
         console.log("disconnected");
@@ -86,3 +98,5 @@ io.on('connection', function(socket){
   });
 });
 
+// Kick-off listener
+addTails();

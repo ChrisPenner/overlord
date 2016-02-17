@@ -3,28 +3,28 @@ html * {
 }
 
 body {
-  margin: 0;
-}
-
-#app, .app {
   display: flex;
   flex-flow: column nowrap;
   height: 100vh;
   margin: 0;
-  
 }
+
+#app {
+  height: 100vh;
+  width: 100%;
+}
+
 
 .categories {
   display: flex;
   flex-flow: row nowrap;
-  min-height: 10%;
 }
 
-.category {
-  padding: 1em;
-  border: 1px solid black;
-  margin: 10px;
-  cursor: grab;
+Category{
+  button {
+    cursor: grab !important;
+  }
+  margin: 0.1em;
 }
 
 .line {
@@ -54,27 +54,13 @@ body {
 
 .view {
   height: 100%;
-  position: relative;
+  min-height: 100px;
   flex: 1 1 50%;
-  border: 1px solid black;
-  overflow-y: scroll;
-  padding-top: 1.5em;
-}
-
-.title {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  font-size: 1rem;
-  padding: 5px;
-  margin: 0;
-  height: 1.5rem;
-  background: black;
-  color: white;
+  overflow-y: hidden;
 }
 
 .lines {
   overflow-y: scroll;
   height: 100%;
+  padding: 0;
 }
