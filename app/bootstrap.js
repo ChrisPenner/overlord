@@ -1,20 +1,11 @@
-import ReactDOM from 'react-dom'
-import React from 'react'
-import App from './components/app'
+import ReactDOM from 'react-dom';
+import React from 'react';
+import electron from 'electron';
+import App from './components/app';
+let renderer = electron.ipcRenderer;
 
-let renderer = require('electron').ipcRenderer;
 function init(app){
-    function receiveMessage(event, filename, line){
-        var categories = app.state.categories;
-        var category = categories[filename];
-        if (category === undefined){
-            category = [];
-            categories[filename] = category;
-        }
-        category.push(line);
-        app.setState({categories: categories});
-    };
-    renderer.on('logs', receiveMessage);
+    renderer.on('logs', (e, filename, line) => app.addMessage(filename, line));
 };
 
 let app = ReactDOM.render(<App/>, document.getElementById('app'));
