@@ -19,7 +19,7 @@ let View = React.createClass({
         }
 
         return (
-            <div className="view panel panel-info" onDrop={this.dataDrop} onDragOver={this.preventDefault} >
+            <div className="view panel" onDrop={this.dataDrop} onDragOver={this.preventDefault} >
             <div className="panel-heading">{this.props.category || "Drag a category here!"} </div>
             <div className="panel-body lines"> 
             {lines}

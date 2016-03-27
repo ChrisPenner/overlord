@@ -8,9 +8,9 @@ body {
   height: 100vh;
   margin: 0;
 
-  background: #4b6cb7; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to left, #4b6cb7 , #182848); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to left, #4b6cb7 , #182848); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #000000; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #000000 , #434343); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #000000 , #434343); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 #app {
@@ -26,17 +26,28 @@ body {
 }
 
 
-.categories {
+.control-bar {
+  color: white;
   flex: 0 0 60px;
   display: flex;
   flex-flow: row nowrap;
   width: 100%;
   padding: 1em;
+  justify-content: space-between;
 }
 
 .category {
   cursor: grab !important;
   margin: 0.1em;
+  background: none;
+  color: white;
+  border-radius: 50px;
+  border: 1px solid white;
+
+  &:hover {
+    color: #337AB7;
+    border-color: #337AB7;
+  }
 }
 
 .line {
@@ -79,13 +90,22 @@ body {
 }
 
 .view {
-  flex: 1 0;
+  flex: 1 1 50%;
   margin: 0.3em;
-  overflow-y: hidden;
+  overflow-y: scroll;
 }
 
 .lines {
   overflow-y: scroll;
   height: 100%;
   padding: 0;
+}
+
+.panel-heading {
+  border-bottom: 1px solid black;
+  height: 2.5em;
+}
+
+.panel {
+  background: rgba(255,255,255, 0.5);
 }

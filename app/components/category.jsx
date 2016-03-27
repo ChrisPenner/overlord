@@ -5,7 +5,7 @@ let Category = React.createClass({
     },
     render: function(){
         return (
-            <div className="category btn btn-default" draggable onDragStart={this.dragStart}>
+            <div className="category btn" draggable onDragStart={this.dragStart}>
             {this.props.name}
             </div>
         );

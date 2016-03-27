@@ -56,13 +56,15 @@ let App = React.createClass({
         });
         return (
             <div className="app">
-                <div className="categories"> 
-                    Categories: {categories} 
-                    <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'one-wide')}>One wide </button>
-                    <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'two-wide')}>Two wide</button>
-                    <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'three-wide')}>Three wide</button>
-                    <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'two-high')}>Two high</button>
-                    <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'combo')}>Combo</button>
+                <div className="control-bar"> 
+                    <div className="categories">Categories: {categories}</div>
+                    <div className="controls">
+                        <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'one-wide')}>One wide </button>
+                        <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'two-wide')}>Two wide</button>
+                        <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'three-wide')}>Three wide</button>
+                        <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'two-high')}>Two high</button>
+                        <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'combo')}>Combo</button>
+                    </div>
                 </div>
                 <div className="views" categories={this.state.categories}>{viewContainer}</div>
             </div>
