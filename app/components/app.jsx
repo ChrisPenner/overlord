@@ -12,6 +12,9 @@ let App = React.createClass({
         views.splice(index, 1, newCategory);
         this.setState({views: views});
     },
+    changeLayout: function(layout){
+        this.setState({layout:layout});
+    },
     addMessage: function(filename, line) {
         let categories = this.state.categories;
         // Initialize if it doesn't exist
@@ -39,11 +42,11 @@ let App = React.createClass({
             );
         });
         let layouts = {
-            'one-wide': (<div className="hor-layout hflex"> { views[0] } </div>),
-                'two-wide': (<div className="hor-layout hflex"> { views[0] } {views[1]} </div>),
-                'three-wide': (<div className="hor-layout hflex"> { views[0] } {views[1]} {views[2]}</div>),
-                'two-high': (<div className="vert-layout vflex"> { views[0] } {views[1]}</div>),
-                'combo': (<div><div className="combo-layout vflex"> { views[0] } {views[1]}</div><div> {views[2]}</div></div>)
+            'one-wide': (<div className="hor-layout layout hflex"> { views[0] } </div>),
+                'two-wide': (<div className="hor-layout layout hflex"> { views[0] } {views[1]} </div>),
+                'three-wide': (<div className="hor-layout layout hflex"> { views[0] } {views[1]} {views[2]}</div>),
+                'two-high': (<div className="vert-layout layout vflex"> { views[0] } {views[1]}</div>),
+                'combo': (<div className="layout hflex"><div className="combo-layout layout vflex"> { views[0] } {views[1]}</div><div className="layout vflex"> {views[2]}</div></div>)
         };
         let viewContainer = layouts[this.state.layout];
         let categories = Object.keys(this.state.categories).map((key) => {
@@ -55,8 +58,11 @@ let App = React.createClass({
             <div className="app">
                 <div className="categories"> 
                     Categories: {categories} 
-                    <button className="btn btn-primary">One wide </button>
-                    <button className="btn btn-primary">Two wide</button>
+                    <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'one-wide')}>One wide </button>
+                    <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'two-wide')}>Two wide</button>
+                    <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'three-wide')}>Three wide</button>
+                    <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'two-high')}>Two high</button>
+                    <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'combo')}>Combo</button>
                 </div>
                 <div className="views" categories={this.state.categories}>{viewContainer}</div>
             </div>
