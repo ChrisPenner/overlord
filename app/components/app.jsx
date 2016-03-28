@@ -1,6 +1,7 @@
 import React from 'react';
 import Category from './category'
 import ViewContainer from './view-container'
+import Settings from './settings'
 let App = React.createClass({
     addView: function(){
         let views = this.state.views.slice();
@@ -48,17 +49,20 @@ let App = React.createClass({
         });
         return (
             <div className="app">
-                <div className="control-bar"> 
-                    <div className="categories">Categories: {categories}</div>
-                    <div className="controls">
-                        <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'one-wide')}>One wide </button>
-                        <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'two-wide')}>Two wide</button>
-                        <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'three-wide')}>Three wide</button>
-                        <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'two-high')}>Two high</button>
-                        <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'combo')}>Combo</button>
+                <div className="vflex main-area">
+                    <div className="control-bar"> 
+                        <div className="categories">Categories: {categories}</div>
+                        <div className="controls">
+                            <div className="layout-selector one-wide" onClick={this.changeLayout.bind(this,'one-wide')}><div></div></div>
+                            <div className="layout-selector two-wide" onClick={this.changeLayout.bind(this,'two-wide')}><div></div> <div></div> </div>
+                            <div className="layout-selector three-wide" onClick={this.changeLayout.bind(this,'three-wide')}><div></div><div></div><div></div></div>
+                            <div className="layout-selector two-high" onClick={this.changeLayout.bind(this,'two-high')}><div></div><div></div></div>
+                            <div className="layout-selector combo" onClick={this.changeLayout.bind(this,'combo')}><div></div><div></div><div></div></div>
+                        </div>
                     </div>
+                    <ViewContainer views={this.state.views} layout={this.state.layout} categories={this.state.categories} alterView={this.alterView}/>
                 </div>
-                <ViewContainer views={this.state.views} layout={this.state.layout} categories={this.state.categories}/>
+                <Settings/>
             </div>
         );
     }

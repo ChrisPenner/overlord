@@ -4,7 +4,7 @@ let ViewContainer = React.createClass({
     render: function(){
         let views = this.props.views.map((category, index) => {
             return (
-                <View category={category} key={index} index={index} categories={this.props.categories} alterView={this.alterView}/>
+                <View category={category} key={index} index={index} categories={this.props.categories} alterView={this.props.alterView}/>
             );
         });
         let layouts = {

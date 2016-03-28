@@ -12,13 +12,13 @@ let mainWindow;
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1000, height: 1000, center: true});
+  mainWindow = new BrowserWindow({width: 1600, height: 1000, center: true});
 
   // and load the index.html of the app.
   mainWindow.loadURL('file://' + __dirname + '/index.html');
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   const init = (filename, lines) => mainWindow.webContents.send('init', filename, lines);
   const trackLogs = (filename, line) => mainWindow.webContents.send('logs', filename, line);
