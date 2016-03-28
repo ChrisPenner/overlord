@@ -5,6 +5,7 @@ import App from './components/app';
 let renderer = electron.ipcRenderer;
 
 function init(app){
+    renderer.on('init', (e, filename, lines) => app.initLogs(filename, lines));
     renderer.on('logs', (e, filename, line) => app.addMessage(filename, line));
 };
 

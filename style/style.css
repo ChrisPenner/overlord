@@ -119,9 +119,9 @@ body {
 
 .view {
   -webkit-box-flex: 1;
-  -webkit-flex: 1 1 50%;
-      -ms-flex: 1 1 50%;
-          flex: 1 1 50%;
+  -webkit-flex: 1 0 0px;
+      -ms-flex: 1 0 0px;
+          flex: 1 0 0px;
   margin: 0.3em;
   overflow-y: scroll; }
 

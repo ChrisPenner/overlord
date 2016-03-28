@@ -22,6 +22,11 @@ let App = React.createClass({
         categories[filename].push(line);
         this.setState({categories: categories});
     },
+    initLogs: function(filename, lines) {
+        let categories = this.state.categories;
+        categories[filename] = lines;
+        this.setState({categories: categories});
+    },
     getInitialState: function(){
         let views = JSON.parse(localStorage.getItem('views')) || [null, null, null];
         let layout = localStorage.getItem('layout') || 'two-wide';

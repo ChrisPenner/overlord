@@ -1,4 +1,4 @@
-import mytail from './mytail'
+import {addTails, getLogs} from './addTails'
 import electron from 'electron'
 
 // Module to control application life.
@@ -18,7 +18,15 @@ function createWindow () {
   mainWindow.loadURL('file://' + __dirname + '/index.html');
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
+
+  const init = (filename, lines) => mainWindow.webContents.send('init', filename, lines);
+  const trackLogs = (filename, line) => mainWindow.webContents.send('logs', filename, line);
+  mainWindow.webContents.on('did-finish-load', function() {
+    // Listen to the file-system and send along new lines.
+    getLogs('./logs/', init);
+    addTails('./logs/', trackLogs);
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
@@ -49,10 +57,3 @@ app.on('activate', function () {
     createWindow();
   }
 });
-
-function sendMessage(filename, line){
-    mainWindow.webContents.send('logs', filename, line);
-}
-
-// Listen to the file-system and send along new lines.
-mytail.addTails('./logs/', sendMessage);
