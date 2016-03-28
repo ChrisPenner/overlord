@@ -1,6 +1,6 @@
 import React from 'react';
 import Category from './category'
-import View from './view'
+import ViewContainer from './view-container'
 let App = React.createClass({
     addView: function(){
         let views = this.state.views.slice();
@@ -28,32 +28,19 @@ let App = React.createClass({
         this.setState({categories: categories});
     },
     getInitialState: function(){
-        let views = JSON.parse(localStorage.getItem('views')) || [null, null, null];
-        let layout = localStorage.getItem('layout') || 'two-wide';
         return {
-            views: views,
             categories: {},
-            layout: layout
+            views: JSON.parse(localStorage.getItem('views')) || [null, null, null],
+            layout: localStorage.getItem('layout') || 'two-wide',
+            filters: JSON.parse(localStorage.getItem('filters')) || ['info', 'error']
         }
     },
     componentDidUpdate: function(prevProps, prevState){
         localStorage.setItem('views', JSON.stringify(this.state.views));
         localStorage.setItem('layout', this.state.layout);
+        localStorage.setItem('filters', JSON.stringify(this.state.filters))
     },
     render: function(){
-        let views = this.state.views.map((category, index) => {
-            return (
-                <View category={category} key={index} index={index} categories={this.state.categories} alterView={this.alterView}/>
-            );
-        });
-        let layouts = {
-            'one-wide': (<div className="hor-layout layout hflex"> { views[0] } </div>),
-                'two-wide': (<div className="hor-layout layout hflex"> { views[0] } {views[1]} </div>),
-                'three-wide': (<div className="hor-layout layout hflex"> { views[0] } {views[1]} {views[2]}</div>),
-                'two-high': (<div className="vert-layout layout vflex"> { views[0] } {views[1]}</div>),
-                'combo': (<div className="layout hflex"><div className="combo-layout layout vflex"> { views[0] } {views[1]}</div><div className="layout vflex"> {views[2]}</div></div>)
-        };
-        let viewContainer = layouts[this.state.layout];
         let categories = Object.keys(this.state.categories).map((key) => {
             return (
                 <Category key={key} name={key} category={this.state.categories[key]}/>
@@ -71,7 +58,7 @@ let App = React.createClass({
                         <button className="btn btn-primary" onClick={this.changeLayout.bind(this,'combo')}>Combo</button>
                     </div>
                 </div>
-                <div className="views" categories={this.state.categories}>{viewContainer}</div>
+                <ViewContainer views={this.state.views} layout={this.state.layout} categories={this.state.categories}/>
             </div>
         );
     }
