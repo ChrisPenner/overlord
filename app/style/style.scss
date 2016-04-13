@@ -1,0 +1,194 @@
+html * {
+  box-sizing: border-box;
+  // color: white;
+}
+
+body {
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100vh;
+  margin: 0;
+
+  // background: #000000; /* fallback for old browsers */
+  // background: -webkit-linear-gradient(to top, #000000 , #434343); /* Chrome 10-25, Safari 5.1-6 */
+  // background: linear-gradient(to top, #000000 , #434343); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#app {
+  height: 100vh;
+  width: 100%;
+}
+
+.app {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.main-area {
+  height: 100%;
+  width: 100%;
+}
+
+.settings {
+  transition: width 0.3s;
+  width: 0;
+  // background: #333;
+  &.active {
+    width: 400px;
+  }
+}
+
+.control-bar {
+  // color: white;
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+  height: 60px;
+  padding: 1em;
+  justify-content: space-between;
+}
+
+.controls {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.category {
+  cursor: grab !important;
+  margin: 0.1em;
+  // background: none;
+  // color: white;
+  // border-radius: 50px;
+  // border: 1px solid white;
+
+  &:hover {
+    // color: #337AB7;
+    // border-color: #337AB7;
+  }
+}
+
+.line {
+  display: block;
+  width: 100%;
+  padding: 3px;
+  // border-bottom: 1px solid #EEE;
+  font-family: monospace;
+}
+
+.good {
+  background: #35BCAF;
+  color: white;
+}
+
+.bad {
+  background: #FF6C6A;
+  color: white;
+}
+
+.views {
+  display: flex;
+  flex: 1 0;
+  width: 100%;
+  height: 100%;
+}
+
+.layout {
+  flex: 1;
+}
+
+.hflex {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.vflex {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.view {
+  flex: 1 0 0px;
+  margin: 0.3em;
+  overflow-y: scroll;
+}
+
+.lines {
+  overflow-y: scroll;
+  height: 100%;
+  padding: 0;
+}
+
+.panel-heading {
+  // border-bottom: 1px solid black;
+  height: 2.5em;
+}
+
+.panel {
+  // background: rgba(255,255,255, 0.1);
+}
+
+.layout-selector {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  background: #333;
+  border: 5px solid #333;
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 5px;
+
+  & div {
+    background: white;
+  }
+
+  &.one-wide div{
+    width: 75%;
+    height: 100%;
+    margin: auto;
+  }
+  &.two-wide div{
+    width: 40%;
+    height: 100%;
+    margin: auto;
+  }
+  &.three-wide div{
+    width: 20%;
+    height: 100%;
+    margin: auto;
+  }
+  &.two-high {
+    flex-flow: column nowrap;
+    & div {
+      width: 100%;
+      height: 40%;
+      margin: auto;
+    }
+  }
+  &.combo {
+    position: relative;
+    & div:nth-of-type(1){
+      height: 40%;
+      width: 40%;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+    & div:nth-of-type(2){
+      height: 40%;
+      width: 40%;
+      position: absolute;
+      top: 50%;
+      left: 0px;
+    }
+    & div:nth-of-type(3){
+      height: 91%;
+      width: 40%;
+      position: absolute;
+      top: 0px;
+      left: 50%;
+    }
+  }
+}
+

@@ -2,6 +2,16 @@ import React from 'react';
 import Category from './category'
 import ViewContainer from './view-container'
 import Settings from './settings'
+import _ from 'lodash'
+
+const NUM_VIEWS_MAP = {
+    'one-wide': 1,
+    'two-wide': 2,
+    'three-wide': 3,
+    'two-high': 2,
+    'combo': 3
+}
+
 let App = React.createClass({
     addView: function(){
         let views = this.state.views.slice();
@@ -10,29 +20,46 @@ let App = React.createClass({
     },
     alterView: function(index, newCategory) {
         let views = this.state.views.slice();
+        let categories = this.state.categories;
         views.splice(index, 1, newCategory);
-        this.setState({views: views});
+        this.setState({views: views, categories: categories});
+        this.clearUnread();
     },
     changeLayout: function(layout){
-        this.setState({layout:layout});
+        const numViews = NUM_VIEWS_MAP[layout];
+        this.setState({layout:layout, numViews: numViews});
+        this.clearUnread();
+    },
+    clearUnread: function(){
+        let categories = this.state.categories;
+        const activeCategories = _.compact(this.state.views.slice(0, this.state.numViews));
+        activeCategories.forEach((category)=>{
+            categories[category].unread = 0;
+        });
+        this.setState({categories: categories});
     },
     addMessage: function(filename, line) {
         let categories = this.state.categories;
         // Initialize if it doesn't exist
-        categories[filename] = categories[filename] || [];
-        categories[filename].push(line);
+        categories[filename] = categories[filename] || {lines:[], unread: 0};
+        categories[filename].lines.push(line);
+        categories[filename].unread += 1;
         this.setState({categories: categories});
+        this.clearUnread();
     },
     initLogs: function(filename, lines) {
         let categories = this.state.categories;
-        categories[filename] = lines;
+        categories[filename] = {lines:lines, unread:0};
         this.setState({categories: categories});
     },
     getInitialState: function(){
+        const layout = localStorage.getItem('layout') || 'two-wide';
+        const numViews = NUM_VIEWS_MAP[layout];
         return {
             categories: {},
             views: JSON.parse(localStorage.getItem('views')) || [null, null, null],
-            layout: localStorage.getItem('layout') || 'two-wide',
+            layout: layout,
+            numViews: numViews,
             filters: JSON.parse(localStorage.getItem('filters')) || ['info', 'error']
         }
     },
@@ -62,7 +89,6 @@ let App = React.createClass({
                     </div>
                     <ViewContainer views={this.state.views} layout={this.state.layout} categories={this.state.categories} alterView={this.alterView}/>
                 </div>
-                <Settings/>
             </div>
         );
     }

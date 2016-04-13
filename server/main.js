@@ -15,7 +15,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 1600, height: 1000, center: true});
 
   // and load the index.html of the app.
-  mainWindow.loadURL('file://' + __dirname + '/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/../app/html/index.html');
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
