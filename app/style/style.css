@@ -52,7 +52,8 @@ body {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
       -ms-flex-pack: justify;
-          justify-content: space-between; }
+          justify-content: space-between;
+  padding-right: 30px; }
 
 .controls {
   display: -webkit-box;
@@ -190,5 +191,11 @@ body {
       position: absolute;
       top: 0px;
       left: 50%; }
+
+.add-logs {
+  font-size: 3em;
+  cursor: pointer;
+  margin-left: 1em;
+  color: #B98F58; }
 
 /*# sourceMappingURL=style.css.map */

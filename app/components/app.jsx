@@ -1,9 +1,11 @@
-import React from 'react';
 import Category from './category'
-import ViewContainer from './view-container'
+import React from 'react';
 import Settings from './settings'
+import ViewContainer from './view-container'
 import _ from 'lodash'
+import electron from 'electron'
 import path from 'path'
+let renderer = electron.ipcRenderer;
 
 const NUM_VIEWS_MAP = {
     'one-wide': 1,
@@ -25,6 +27,10 @@ let App = React.createClass({
         views.splice(index, 1, newCategory);
         this.setState({views: views, categories: categories});
         this.clearUnread();
+    },
+    openLogLocationDialog: function(){
+        renderer.send('openLogLocationDialog', true);
+        console.log('sent message');
     },
     changeLayout: function(layout){
         const numViews = NUM_VIEWS_MAP[layout];
@@ -88,8 +94,8 @@ let App = React.createClass({
                             <div className="layout-selector three-wide" onClick={this.changeLayout.bind(this,'three-wide')}><div></div><div></div><div></div></div>
                             <div className="layout-selector two-high" onClick={this.changeLayout.bind(this,'two-high')}><div></div><div></div></div>
                             <div className="layout-selector combo" onClick={this.changeLayout.bind(this,'combo')}><div></div><div></div><div></div></div>
+                            <div onClick={this.openLogLocationDialog}><span className="glyphicon glyphicon-folder-open add-logs"></span></div>
                         </div>
-                        <div><span className="glyphicon glyphicon-folder-open"></span></div>
                     </div>
                     <ViewContainer views={this.state.views} layout={this.state.layout} categories={this.state.categories} alterView={this.alterView}/>
                 </div>

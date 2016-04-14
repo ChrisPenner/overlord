@@ -6,6 +6,7 @@ import _ from 'lodash'
 // Module to control application life.
 const app = electron.app;
 const dialog = electron.dialog;
+const ipc = electron.ipcMain;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
@@ -25,17 +26,26 @@ function createWindow () {
 
   const init = (filename, lines) => mainWindow.webContents.send('init', filename, lines);
   const trackLogs = (filename, line) => mainWindow.webContents.send('logs', filename, line);
+  // storage.set('userData', {})
 
-  mainWindow.webContents.on('addLogLocations', (locations) => {
-      storage.get('logFiles', (err, data) => {
-          const existingLogFiles = data.logFiles || [];
-          data.logFiles = _.union([existingLogFiles, locations]);
-          storage.set('logFiles', data);
-          const newLocations = _.difference(locations, existingLogFiles);
-          initNewFiles(newLocations);
+  ipc.on('openLogLocationDialog', () => {
+      dialog.showOpenDialog( {
+          title: 'Choose log files or directories',
+          defaultPath: '~/',
+          properties: [ 'openFile', 'openDirectory', 'multiSelections' ]
+      }, (locations) => {
+          storage.get('userData', (err, data) => {
+              console.log('log-files:', data);
+              const existingLogFiles = data.logFiles || [];
+              data.logFiles = _.union(existingLogFiles, locations);
+              console.log('union', data.logFiles);
+              storage.set('userData', data);
+              const newLocations = _.difference(locations, existingLogFiles);
+              console.log('newLocations', newLocations);
+              initNewFiles(newLocations);
+          });
       });
   });
-  storage.set('logFiles', {logFiles: ['/Users/chris/logs']});
 
   function initNewFiles(paths){
       getLocations(paths, (filenames) => {
@@ -45,7 +55,7 @@ function createWindow () {
   }
 
   mainWindow.webContents.on('did-finish-load', function() {
-      storage.get('logFiles', (error, data) =>{
+      storage.get('userData', (error, data) =>{
           if (error) throw error;
 
           const locations = data.logFiles || [];

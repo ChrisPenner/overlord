@@ -48,6 +48,7 @@ body {
   height: 60px;
   padding: 1em;
   justify-content: space-between;
+  padding-right: 30px;
 }
 
 .controls {
@@ -192,3 +193,9 @@ body {
   }
 }
 
+.add-logs {
+  font-size: 3em;
+  cursor: pointer;
+  margin-left: 1em;
+  color: #B98F58;
+}

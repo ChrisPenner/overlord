@@ -33,9 +33,8 @@ function getLogsFromFiles(files, callback){
 }
 
 function getLocations(locations, callback){
-    console.log('statting');
-    console.log(locations);
     for (let location of locations){
+        console.log('location:', location)
         fs.stat(location, (err, locationStats) => {
             if (err) throw err;
             if (locationStats.isDirectory()) {
