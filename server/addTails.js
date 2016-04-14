@@ -4,34 +4,47 @@ import path from 'path'
 import readline from 'readline'
 
 // Add a listener to each log-file
-function addTails(logDir, callback){
-    fs.readdir(logDir, function(err, files){
-        if(err){
-            throw err;
-        }
-        for (const filename of files) {
-            let fullpath = path.resolve(logDir, filename);
-            let t = new Tail(fullpath);
-            // Each time a new line comes in, send it along
-            t.on("line", function(line){
-                callback(filename, line)
-            });
-        }
-    });
+function addTails(filenames, callback){
+    for (const filename of filenames) {
+        let t = new Tail(filename);
+        // Each time a new line comes in, send it along
+        t.on("line", function(line){
+            callback(filename, line)
+        });
+    }
 }
 
-function getLogs(logDir, callback){
+function getFileNames(logDir, callback){
     fs.readdir(logDir, function(err,files){
         if(err){ throw err; }
-        for (const filename of files){
-            let fullpath = path.resolve(logDir, filename);
-            fs.readFile(fullpath, "utf-8", function (err, text) {
-                if (err) {throw err};
-                let lines = text.split('\n');
-                callback(filename, lines);
-            });
-        }
+        const filenames = files.map((filename) => path.resolve(logDir, filename))
+        callback(filenames);
     });
 }
 
-export { addTails,  getLogs }
+function getLogsFromFiles(files, callback){
+    for (const filename of files){
+        fs.readFile(filename, "utf-8", function (err, text) {
+            if (err) {throw err};
+            let lines = text.split('\n');
+            callback(filename, lines);
+        });
+    }
+}
+
+function getLocations(locations, callback){
+    console.log('statting');
+    console.log(locations);
+    for (let location of locations){
+        fs.stat(location, (err, locationStats) => {
+            if (err) throw err;
+            if (locationStats.isDirectory()) {
+                getFileNames(location, callback);
+            } else {
+                callback(filenames);
+            }
+        });
+    }
+}
+
+export { addTails, getLocations, getFileNames, getLogsFromFiles}

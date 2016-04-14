@@ -1,8 +1,11 @@
-import {addTails, getLogs} from './addTails'
+import {addTails, getLocations, getLogsFromFiles} from './addTails'
 import electron from 'electron'
+import storage from 'electron-json-storage'
+import _ from 'lodash'
 
 // Module to control application life.
 const app = electron.app;
+const dialog = electron.dialog;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
@@ -22,10 +25,32 @@ function createWindow () {
 
   const init = (filename, lines) => mainWindow.webContents.send('init', filename, lines);
   const trackLogs = (filename, line) => mainWindow.webContents.send('logs', filename, line);
+
+  mainWindow.webContents.on('addLogLocations', (locations) => {
+      storage.get('logFiles', (err, data) => {
+          const existingLogFiles = data.logFiles || [];
+          data.logFiles = _.union([existingLogFiles, locations]);
+          storage.set('logFiles', data);
+          const newLocations = _.difference(locations, existingLogFiles);
+          initNewFiles(newLocations);
+      });
+  });
+  storage.set('logFiles', {logFiles: ['/Users/chris/logs']});
+
+  function initNewFiles(paths){
+      getLocations(paths, (filenames) => {
+          getLogsFromFiles(filenames, init);
+          addTails(filenames, trackLogs);
+      });
+  }
+
   mainWindow.webContents.on('did-finish-load', function() {
-    // Listen to the file-system and send along new lines.
-    getLogs('./logs/', init);
-    addTails('./logs/', trackLogs);
+      storage.get('logFiles', (error, data) =>{
+          if (error) throw error;
+
+          const locations = data.logFiles || [];
+          initNewFiles(locations);
+      });
   });
 
   // Emitted when the window is closed.

@@ -3,6 +3,7 @@ import Category from './category'
 import ViewContainer from './view-container'
 import Settings from './settings'
 import _ from 'lodash'
+import path from 'path'
 
 const NUM_VIEWS_MAP = {
     'one-wide': 1,
@@ -39,17 +40,19 @@ let App = React.createClass({
         this.setState({categories: categories});
     },
     addMessage: function(filename, line) {
+        const shortname = path.basename(filename);
         let categories = this.state.categories;
         // Initialize if it doesn't exist
-        categories[filename] = categories[filename] || {lines:[], unread: 0};
-        categories[filename].lines.push(line);
-        categories[filename].unread += 1;
+        categories[shortname] = categories[shortname] || {lines:[], unread: 0};
+        categories[shortname].lines.push(line);
+        categories[shortname].unread += 1;
         this.setState({categories: categories});
         this.clearUnread();
     },
     initLogs: function(filename, lines) {
+        const shortname = path.basename(filename);
         let categories = this.state.categories;
-        categories[filename] = {lines:lines, unread:0};
+        categories[shortname] = {lines:lines, unread:0};
         this.setState({categories: categories});
     },
     getInitialState: function(){
@@ -86,6 +89,7 @@ let App = React.createClass({
                             <div className="layout-selector two-high" onClick={this.changeLayout.bind(this,'two-high')}><div></div><div></div></div>
                             <div className="layout-selector combo" onClick={this.changeLayout.bind(this,'combo')}><div></div><div></div><div></div></div>
                         </div>
+                        <div><span className="glyphicon glyphicon-folder-open"></span></div>
                     </div>
                     <ViewContainer views={this.state.views} layout={this.state.layout} categories={this.state.categories} alterView={this.alterView}/>
                 </div>
