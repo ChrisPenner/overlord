@@ -1,4 +1,5 @@
 import React from 'react';
+import {Panel} from 'react-bootstrap'
 let View = React.createClass({
     preventDefault: function(e){
         e.preventDefault();
@@ -17,14 +18,12 @@ let View = React.createClass({
                 );
             });
         }
-
+        const panelHeader = <div> {this.props.category || "Drag a category here!"}</div>;
         return (
-            <div className="view panel panel-default" onDrop={this.dataDrop} onDragOver={this.preventDefault} >
-            <div className="panel-heading">{this.props.category || "Drag a category here!"} </div>
-            <div className="panel-body lines"> 
-            {lines}
-            </div>
-            </div>
+            <Panel className="view" bsStyle="default" onDrop={this.dataDrop}
+                onDragOver={this.preventDefault} header={panelHeader}>
+                {lines}
+            </Panel>
         );
     }
 });

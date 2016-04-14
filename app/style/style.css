@@ -70,8 +70,7 @@ body {
 
 .category {
   cursor: -webkit-grab !important;
-  cursor: grab !important;
-  margin: 0.1em; }
+  cursor: grab !important; }
 
 .line {
   display: block;

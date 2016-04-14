@@ -1,4 +1,5 @@
 import React from 'react';
+import {Button, Badge} from 'react-bootstrap'
 let Category = React.createClass({
     dragStart: function(e){
         e.dataTransfer.setData("text", this.props.name);
@@ -7,13 +8,13 @@ let Category = React.createClass({
         let unread = this.props.category.unread;
         let badge = null;
         if(unread){
-            badge = <span className="badge">{this.props.category.unread}</span>
+            badge = <Badge pullRight={true}>{this.props.category.unread}</Badge>
         }
         return (
-            <div className="category btn btn-default" draggable onDragStart={this.dragStart}>
+            <Button className="category" bsStyle="default" draggable onDragStart={this.dragStart}>
             {this.props.name}
             { badge }
-            </div>
+            </Button>
         );
     }
 });

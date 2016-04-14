@@ -1,5 +1,6 @@
 import Category from './category'
 import React from 'react';
+import {Glyphicon} from 'react-bootstrap'
 import Settings from './settings'
 import ViewContainer from './view-container'
 import _ from 'lodash'
@@ -71,7 +72,10 @@ let App = React.createClass({
             views: JSON.parse(localStorage.getItem('views')) || [null, null, null],
             layout: layout,
             numViews: numViews,
-            filters: JSON.parse(localStorage.getItem('filters')) || ['info', 'error']
+            filters: JSON.parse(localStorage.getItem('filters')) || [
+                {name: 'INFO', type: 'highlight', pattern: 'INFO'},
+                {name: 'ERROR', type: 'solo', pattern: '500'}
+            ]
         }
     },
     componentDidUpdate: function(prevProps, prevState){
@@ -96,13 +100,13 @@ let App = React.createClass({
                             <div className="layout-selector three-wide" onClick={this.changeLayout.bind(this,'three-wide')}><div></div><div></div><div></div></div>
                             <div className="layout-selector two-high" onClick={this.changeLayout.bind(this,'two-high')}><div></div><div></div></div>
                             <div className="layout-selector combo" onClick={this.changeLayout.bind(this,'combo')}><div></div><div></div><div></div></div>
-                            <div onClick={this.openLogLocationDialog}><span className="glyphicon glyphicon-folder-open add-logs"></span></div>
-                            <div onClick={this.toggleSideBar}><span className="glyphicon glyphicon-cog settings-icon"></span></div>
+                            <div onClick={this.openLogLocationDialog}><Glyphicon glyph="folder-open" className="add-logs"/></div>
+                            <div onClick={this.toggleSideBar}><Glyphicon glyph="cog" className="settings-icon"/></div>
                         </div>
                     </div>
                     <ViewContainer views={this.state.views} layout={this.state.layout} categories={this.state.categories} alterView={this.alterView}/>
                 </div>
-                <Settings active={this.state.showSettings} />
+                <Settings active={this.state.showSettings} filters={this.state.filters} />
             </div>
         );
     }

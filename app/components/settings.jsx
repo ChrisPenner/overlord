@@ -3,13 +3,15 @@ import classnames from 'classnames'
 const Settings = React.createClass({
     render: function(){
         const classes = classnames('settings', { 'active': this.props.active });
+        const filters = this.props.filters.map((filter) => {
+            return <li key={filter.name}><label>{filter.name}: <input type="text"/></label></li>
+        });
         return (
             <div className={classes}>
                 <div className="settings-module">
                     <h2>Syntax</h2>
                     <ul>
-                        <li><label>INFO: <input type="text"/></label></li>
-                        <li><label>404: <input type="text"/></label></li>
+                        {filters}
                     </ul>
                 </div>
             </div>
