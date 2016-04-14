@@ -1,8 +1,10 @@
 import React from 'react';
+import classnames from 'classnames'
 const Settings = React.createClass({
     render: function(){
+        const classes = classnames('settings', { 'active': this.props.active });
         return (
-            <div className="settings active">
+            <div className={classes}>
                 <div className="settings-module">
                     <h2>Syntax</h2>
                     <ul>

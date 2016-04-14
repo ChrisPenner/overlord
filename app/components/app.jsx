@@ -30,7 +30,9 @@ let App = React.createClass({
     },
     openLogLocationDialog: function(){
         renderer.send('openLogLocationDialog', true);
-        console.log('sent message');
+    },
+    toggleSideBar: function(){
+        this.setState({showSettings: !this.state.showSettings});
     },
     changeLayout: function(layout){
         const numViews = NUM_VIEWS_MAP[layout];
@@ -95,10 +97,12 @@ let App = React.createClass({
                             <div className="layout-selector two-high" onClick={this.changeLayout.bind(this,'two-high')}><div></div><div></div></div>
                             <div className="layout-selector combo" onClick={this.changeLayout.bind(this,'combo')}><div></div><div></div><div></div></div>
                             <div onClick={this.openLogLocationDialog}><span className="glyphicon glyphicon-folder-open add-logs"></span></div>
+                            <div onClick={this.toggleSideBar}><span className="glyphicon glyphicon-cog settings-icon"></span></div>
                         </div>
                     </div>
                     <ViewContainer views={this.state.views} layout={this.state.layout} categories={this.state.categories} alterView={this.alterView}/>
                 </div>
+                <Settings active={this.state.showSettings} />
             </div>
         );
     }
