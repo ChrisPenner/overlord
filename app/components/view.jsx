@@ -11,12 +11,22 @@ let View = React.createClass({
     render: function(){
         let category = this.props.categories[this.props.category];
         let lines = []
+        console.log(this.props.filters)
         if (category){
-            lines = category.lines.map((line, index) => {
-                return (
-                    <div className={"line"} key={index}>{line}</div>
-                );
-            });
+            // Don't filter if we don't have any filters
+            if (this.props.filters.length === 0) {
+                lines = category.lines;
+            } else {
+                const filterCheck = function(filter, line) {return new RegExp(filter.pattern, 'i').test(line)};
+                lines = category.lines.filter((line) => {
+                    return _.some(this.props.filters, (filter) => filterCheck(filter, line));
+                });
+            }
+            lines = lines.map((line, index) => {
+                        return (
+                            <div className={"line"} key={index}>{line}</div>
+                        );
+                    });
         }
         const panelHeader = <div> {this.props.category || "Drag a category here!"}</div>;
         return (

@@ -29,6 +29,12 @@ let App = React.createClass({
         this.setState({views: views, categories: categories});
         this.clearUnread();
     },
+    filterChanged: function(id, filter){
+        // Replace value in filters
+        let filters = this.state.filters.slice()
+        filters.splice(id, 1, filter);
+        this.setState({filters: filters})
+    },
     openLogLocationDialog: function(){
         renderer.send('openLogLocationDialog', true);
     },
@@ -67,15 +73,19 @@ let App = React.createClass({
     getInitialState: function(){
         const layout = localStorage.getItem('layout') || 'two-wide';
         const numViews = NUM_VIEWS_MAP[layout];
+        let filters = JSON.parse(localStorage.getItem('filters')) || [{
+            id: 0,
+            pattern: '.*',
+            active: false
+        }];
+        console.log(filters);
+
         return {
             categories: {},
             views: JSON.parse(localStorage.getItem('views')) || [null, null, null],
             layout: layout,
             numViews: numViews,
-            filters: JSON.parse(localStorage.getItem('filters')) || [
-                {name: 'INFO', type: 'highlight', pattern: 'INFO'},
-                {name: 'ERROR', type: 'solo', pattern: '500'}
-            ]
+            filters: filters
         }
     },
     componentDidUpdate: function(prevProps, prevState){
@@ -89,6 +99,7 @@ let App = React.createClass({
                 <Category key={key} name={key} category={this.state.categories[key]}/>
             );
         });
+        const activeFilters = _.filter(this.state.filters, 'active');
         return (
             <div className="app">
                 <div className="vflex main-area">
@@ -104,9 +115,9 @@ let App = React.createClass({
                             <div onClick={this.toggleSideBar}><Glyphicon glyph="cog" className="settings-icon"/></div>
                         </div>
                     </div>
-                    <ViewContainer views={this.state.views} layout={this.state.layout} categories={this.state.categories} alterView={this.alterView}/>
+                    <ViewContainer filters={activeFilters} views={this.state.views} layout={this.state.layout} categories={this.state.categories} alterView={this.alterView}/>
                 </div>
-                <Settings active={this.state.showSettings} filters={this.state.filters} />
+                <Settings active={this.state.showSettings} filterChanged={this.filterChanged} filters={this.state.filters} />
             </div>
         );
     }
