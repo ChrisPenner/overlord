@@ -33,7 +33,18 @@ let App = React.createClass({
         // Replace value in filters
         let filters = this.state.filters.slice()
         filters.splice(id, 1, filter);
+        filters = _.compact(filters);
+        filters.forEach((filter, index) => filter.id = index);
         this.setState({filters: filters})
+    },
+    addFilter: function(){
+        let filters = this.state.filters.slice();
+        filters.push({
+            id: filters.length,
+            pattern: '',
+            active: false
+        });
+        this.setState({filters: filters});
     },
     openLogLocationDialog: function(){
         renderer.send('openLogLocationDialog', true);
@@ -117,7 +128,7 @@ let App = React.createClass({
                     </div>
                     <ViewContainer filters={activeFilters} views={this.state.views} layout={this.state.layout} categories={this.state.categories} alterView={this.alterView}/>
                 </div>
-                <Settings active={this.state.showSettings} filterChanged={this.filterChanged} filters={this.state.filters} />
+                <Settings active={this.state.showSettings} filterChanged={this.filterChanged} filters={this.state.filters} addFilter={this.addFilter} />
             </div>
         );
     }

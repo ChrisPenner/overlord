@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames'
 import Filter from './filter'
+import {Glyphicon} from 'react-bootstrap'
 const Settings = React.createClass({
     render: function(){
         const classes = classnames('settings', { 'active': this.props.active });
@@ -13,6 +14,9 @@ const Settings = React.createClass({
                     <h2>Filters</h2>
                     <ul>
                         {filters}
+                        <li onClick={this.props.addFilter}> 
+                            <Glyphicon glyph="plus" />
+                        </li>
                     </ul>
                 </div>
             </div>
