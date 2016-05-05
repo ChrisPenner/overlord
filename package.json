@@ -28,5 +28,8 @@
     "react-bootstrap": "^0.28.5",
     "react-dom": "^0.14.7",
     "tail": "^1.0.0"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^0.37.8"
   }
 }
