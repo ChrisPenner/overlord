@@ -1,4 +1,4 @@
-import {addTails, getFileNames, getLogsFromFiles} from './addTails'
+import {addTail, getFileNames, getLogsFromFile} from './addTails'
 import electron from 'electron'
 import storage from 'electron-json-storage'
 import _ from 'lodash'
@@ -17,7 +17,9 @@ const BrowserWindow = electron.BrowserWindow;
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-let userData = {logFiles: []};
+let userData = {logDir: null};
+// storage.set('userData', userData);
+
 
 function createWindow () {
   mainWindow = new BrowserWindow({width: 1600, height: 1000, center: true});
@@ -37,42 +39,51 @@ ipc.on('openLogLocationDialog', () => {
     dialog.showOpenDialog( {
         title: 'Choose log files or directories',
         defaultPath: '~/',
-        properties: [ 'openFile', 'openDirectory', 'multiSelections' ]
-    }, (locations) => {
-        const existingLogFiles = userData.logFiles || [];
-        userData.logFiles = _.union(existingLogFiles, locations);
+        properties: [ 'openDirectory' ]
+    }, (logDirs) => {
+        if (!logDirs || logDirs.length == 0){
+            return
+        }
+        const logDir = logDirs[0]
+        console.log('received:', logDir)
+        const previousLocation = userData.logDir
+        userData.logDir = logDir
         storage.set('userData', userData);
-        const newLocations = _.difference(locations, existingLogFiles);
-        ipc.emit('newLocations', newLocations);
+        if (logDir != previousLocation){
+            ipc.emit('newLogDir', logDir);
+        }
     });
 });
 
 ipc.on('newWindow', (window) => {
-    const paths = userData.logFiles;
-    getFileNames(paths, (filenames) => {
-        getLogsFromFiles(filenames, (filename, lines) => {
+    const logDir = userData.logDir;
+    if (!logDir) {
+        return
+    }
+    getFileNames(logDir, (filename) => {
+        getLogsFromFile(filename, (filename, lines) => {
             window.webContents.send('init', filename, lines)
         });
     });
 });
 
-ipc.on('newLocations', (paths) => {
-    getFileNames(paths, (filenames) => {
-        getLogsFromFiles(filenames, (filename, lines) => {
+ipc.on('newLogDir', (paths) => {
+    getFileNames(paths, (filename) => {
+        getLogsFromFile(filename, (filename, lines) => {
             if (mainWindow) {
                 mainWindow.webContents.send('init', filename, lines);
             }
         });
-        addTails(filenames, (filename, line) => {
+        addTail(filename, (filename, line) => {
             if (mainWindow) {
                 mainWindow.webContents.send('logs', filename, line)
             }
         });
     });
 });
-
 storage.get('userData', (error, data) => {
     if (error) throw error;
-    userData = _.defaults(data, {logFiles: []});
-    ipc.emit('newLocations', userData.logFiles);
+    if (userData.logDir) {
+        ipc.emit('newLogDir', userData.logDir);
+    }
 });
