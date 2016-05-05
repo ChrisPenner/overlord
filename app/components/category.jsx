@@ -8,10 +8,10 @@ let Category = React.createClass({
         let unread = this.props.category.unread;
         let badge = null;
         if(unread){
-            badge = <Badge pullRight={true}>{this.props.category.unread}</Badge>
+            badge = <Badge>{this.props.category.unread}</Badge>
         }
         return (
-            <Button className="category" bsStyle="default" draggable onDragStart={this.dragStart}>
+            <Button className="category" draggable onDragStart={this.dragStart}>
             {this.props.name}
             { badge }
             </Button>

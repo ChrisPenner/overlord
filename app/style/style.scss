@@ -48,7 +48,6 @@ body {
   display: flex;
   flex-flow: row nowrap;
   width: 100%;
-  height: 60px;
   padding: 1em;
   justify-content: space-between;
   padding-right: 30px;
@@ -61,15 +60,20 @@ body {
 
 .category {
   cursor: grab !important;
-  // margin: 0.1em;
-  // background: none;
-  // color: white;
-  // border-radius: 50px;
-  // border: 1px solid white;
+  margin: 0.1em;
+  background: none;
+  color: black;
+  border-radius: 50px;
+  border: 1px solid black;
 
   &:hover {
-    // color: #337AB7;
-    // border-color: #337AB7;
+    color: #337AB7;
+    border-color: #337AB7;
+    background: #d9edf7;
+  }
+
+  & .badge {
+    margin-left: 5px;
   }
 }
 
@@ -124,9 +128,11 @@ body {
   padding: 0;
 }
 
-.panel-heading {
-  // border-bottom: 1px solid black;
-  height: 2.5em;
+.panel-header {
+  position: absolute;
+  padding: 5px 15px;
+  border-radius: 20px;
+  color: black;
 }
 
 .panel {

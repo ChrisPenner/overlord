@@ -2,13 +2,8 @@ html * {
   box-sizing: border-box; }
 
 body {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-flow: column nowrap;
-      -ms-flex-flow: column nowrap;
-          flex-flow: column nowrap;
+  flex-flow: column nowrap;
   height: 100vh;
   margin: 0; }
 
@@ -19,13 +14,8 @@ body {
 .app {
   height: 100%;
   width: 100%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-flow: row nowrap;
-      -ms-flex-flow: row nowrap;
-          flex-flow: row nowrap; }
+  flex-flow: row nowrap; }
 
 .main-area {
   height: 100%;
@@ -33,8 +23,7 @@ body {
 
 .settings {
   position: relative;
-  -webkit-transition: width 0.3s, opacity 0.3s;
-          transition: width 0.3s, opacity 0.3s;
+  transition: width 0.3s, opacity 0.3s;
   width: 0;
   opacity: 0;
   overflow: hidden; }
@@ -43,34 +32,30 @@ body {
     opacity: 1; }
 
 .control-bar {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-flow: row nowrap;
-      -ms-flex-flow: row nowrap;
-          flex-flow: row nowrap;
+  flex-flow: row nowrap;
   width: 100%;
-  height: 60px;
   padding: 1em;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   padding-right: 30px; }
 
 .controls {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-flow: row nowrap;
-      -ms-flex-flow: row nowrap;
-          flex-flow: row nowrap; }
+  flex-flow: row nowrap; }
 
 .category {
-  cursor: -webkit-grab !important;
-  cursor: grab !important; }
+  cursor: grab !important;
+  margin: 0.1em;
+  background: none;
+  color: black;
+  border-radius: 50px;
+  border: 1px solid black; }
+  .category:hover {
+    color: #337AB7;
+    border-color: #337AB7;
+    background: #d9edf7; }
+  .category .badge {
+    margin-left: 5px; }
 
 .line {
   display: block;
@@ -87,46 +72,24 @@ body {
   color: white; }
 
 .views {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 0;
-      -ms-flex: 1 0;
-          flex: 1 0;
+  flex: 1 0;
   width: 100%;
   height: 100%; }
 
 .layout {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1; }
+  flex: 1; }
 
 .hflex {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-flow: row nowrap;
-      -ms-flex-flow: row nowrap;
-          flex-flow: row nowrap; }
+  flex-flow: row nowrap; }
 
 .vflex {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-flow: column nowrap;
-      -ms-flex-flow: column nowrap;
-          flex-flow: column nowrap; }
+  flex-flow: column nowrap; }
 
 .view {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 0 0px;
-      -ms-flex: 1 0 0px;
-          flex: 1 0 0px;
+  flex: 1 0 0px;
   margin: 0.3em;
   overflow-y: scroll; }
 
@@ -135,8 +98,11 @@ body {
   height: 100%;
   padding: 0; }
 
-.panel-heading {
-  height: 2.5em; }
+.panel-header {
+  position: absolute;
+  padding: 5px 15px;
+  border-radius: 20px;
+  color: black; }
 
 .layout-selector {
   cursor: pointer;
@@ -144,17 +110,11 @@ body {
   height: 40px;
   background: #333;
   border: 5px solid #333;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-flow: row nowrap;
-      -ms-flex-flow: row nowrap;
-          flex-flow: row nowrap;
+  flex-flow: row nowrap;
   margin: 5px;
   opacity: 0.8;
-  -webkit-transition: 0.2s opacity;
-          transition: 0.2s opacity; }
+  transition: 0.2s opacity; }
   .layout-selector:hover {
     opacity: 1; }
   .layout-selector div {
@@ -172,9 +132,7 @@ body {
     height: 100%;
     margin: auto; }
   .layout-selector.two-high {
-    -webkit-flex-flow: column nowrap;
-        -ms-flex-flow: column nowrap;
-            flex-flow: column nowrap; }
+    flex-flow: column nowrap; }
     .layout-selector.two-high div {
       width: 100%;
       height: 40%;
@@ -205,8 +163,7 @@ body {
   cursor: pointer;
   margin: 0 0.2em;
   opacity: 0.8;
-  -webkit-transition: 0.2s opacity;
-          transition: 0.2s opacity; }
+  transition: 0.2s opacity; }
   .add-logs:hover, .settings-icon:hover {
     opacity: 1; }
 

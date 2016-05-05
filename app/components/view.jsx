@@ -28,10 +28,11 @@ let View = React.createClass({
                         );
                     });
         }
-        const panelHeader = <div> {this.props.category || "Drag a category here!"}</div>;
+        const panelHeader = <div className="panel-header bg-info"> {this.props.category || "Drag a category here!"}</div>;
         return (
             <Panel className="view" bsStyle="default" onDrop={this.dataDrop}
-                onDragOver={this.preventDefault} header={panelHeader}>
+                onDragOver={this.preventDefault}>
+                {panelHeader}
                 {lines}
             </Panel>
         );
