@@ -22,7 +22,6 @@ let userData = {logFiles: []};
 function createWindow () {
   mainWindow = new BrowserWindow({width: 1600, height: 1000, center: true});
   mainWindow.loadURL('file://' + __dirname + '/../app/html/index.html');
-  mainWindow.webContents.openDevTools();
   mainWindow.webContents.on('did-finish-load', () => { 
       ipc.emit('newWindow', mainWindow); 
   });
