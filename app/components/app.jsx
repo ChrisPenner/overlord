@@ -24,10 +24,9 @@ let App = React.createClass({
     },
     alterView: function(index, newCategory) {
         let views = this.state.views.slice();
-        let categories = this.state.categories;
         views.splice(index, 1, newCategory);
-        this.setState({views: views, categories: categories});
-        this.clearUnread();
+        this.setState({views: views});
+        this.clearUnread(newCategory);
     },
     filterChanged: function(id, filter){
         // Replace value in filters
@@ -57,13 +56,16 @@ let App = React.createClass({
         this.setState({layout:layout, numViews: numViews});
         this.clearUnread();
     },
-    clearUnread: function(){
-        let categories = this.state.categories;
+    clearUnread: function(category){
+        let newCategories = {...this.state.categories}
         const activeCategories = _.compact(this.state.views.slice(0, this.state.numViews));
         activeCategories.forEach((category)=>{
-            categories[category].unread = 0;
+            newCategories[category].unread = 0;
         });
-        this.setState({categories: categories});
+        if (category) {
+            newCategories[category].unread = 0;
+        }
+        this.setState({categories: newCategories});
     },
     addMessage: function(filename, line) {
         const shortname = path.basename(filename);
