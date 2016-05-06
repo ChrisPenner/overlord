@@ -20,12 +20,36 @@ let mainWindow;
 let userData = {logDir: null};
 // storage.set('userData', userData);
 
+ipc.on('newLogDir', (paths) => {
+    getFileNames(paths, (filename) => {
+        getLogsFromFile(filename, (filename, lines) => {
+            lines = lines.filter((line) => {
+                return line.trim();
+            });
+            if (mainWindow) {
+                mainWindow.webContents.send('init', filename, lines);
+            }
+        });
+        addTail(filename, (filename, line) => {
+            if (mainWindow) {
+                mainWindow.webContents.send('logs', filename, line);
+            }
+        });
+    });
+});
 
 function createWindow () {
   mainWindow = new BrowserWindow({width: 1600, height: 1000, center: true});
   mainWindow.loadURL('file://' + __dirname + '/../app/html/index.html');
   mainWindow.webContents.on('did-finish-load', () => { 
       ipc.emit('newWindow', mainWindow); 
+      storage.get('userData', (error, data) => {
+          if (error) throw error;
+          userData = data;
+          if (data.logDir) {
+              ipc.emit('newLogDir', data.logDir);
+          }
+      });
   });
 
   mainWindow.on('closed', () => {
@@ -45,7 +69,6 @@ ipc.on('openLogLocationDialog', () => {
             return
         }
         const logDir = logDirs[0]
-        console.log('received:', logDir)
         const previousLocation = userData.logDir
         userData.logDir = logDir
         storage.set('userData', userData);
@@ -65,25 +88,4 @@ ipc.on('newWindow', (window) => {
             window.webContents.send('init', filename, lines)
         });
     });
-});
-
-ipc.on('newLogDir', (paths) => {
-    getFileNames(paths, (filename) => {
-        getLogsFromFile(filename, (filename, lines) => {
-            if (mainWindow) {
-                mainWindow.webContents.send('init', filename, lines);
-            }
-        });
-        addTail(filename, (filename, line) => {
-            if (mainWindow) {
-                mainWindow.webContents.send('logs', filename, line)
-            }
-        });
-    });
-});
-storage.get('userData', (error, data) => {
-    if (error) throw error;
-    if (userData.logDir) {
-        ipc.emit('newLogDir', userData.logDir);
-    }
 });
