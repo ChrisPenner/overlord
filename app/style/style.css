@@ -61,7 +61,9 @@ body {
   display: block;
   width: 100%;
   padding: 3px;
-  font-family: monospace; }
+  font-family: monospace;
+  word-break: break-all;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
 
 .good {
   background: #35BCAF;
@@ -78,7 +80,8 @@ body {
   height: 100%; }
 
 .layout {
-  flex: 1; }
+  flex: 1;
+  width: 100%; }
 
 .hflex {
   display: flex;

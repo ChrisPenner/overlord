@@ -83,6 +83,8 @@ body {
   padding: 3px;
   // border-bottom: 1px solid #EEE;
   font-family: monospace;
+  word-break: break-all;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .good {
@@ -104,6 +106,7 @@ body {
 
 .layout {
   flex: 1;
+  width:100%;
 }
 
 .hflex {
